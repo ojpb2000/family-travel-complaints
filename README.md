@@ -89,8 +89,8 @@ This project analyzes family travel complaints from a dataset of 13,630 classifi
 
 ### 🌐 Online Access
 - **Visit the live website**: [https://ojpb2000.github.io/family-travel-complaints/](https://ojpb2000.github.io/family-travel-complaints/)
-- **Complete Analysis**: View the comprehensive analysis report
-- **Interactive Dashboard**: Explore charts and filters
+- **Complete Analysis**: Direct access to the comprehensive analysis report
+- **Interactive Dashboard**: [https://ojpb2000.github.io/family-travel-complaints/Family_Travel_Complaints_Dashboard.html](https://ojpb2000.github.io/family-travel-complaints/Family_Travel_Complaints_Dashboard.html)
 
 ### 💻 Local Usage
 1. **Open Dashboard**: Open `Family_Travel_Complaints_Dashboard.html` in any web browser
@@ -155,8 +155,7 @@ This project is automatically deployed to GitHub Pages. The website is updated e
 - **SEO Friendly**: Proper meta tags and structure for search engines
 
 ### Access the Live Site:
-- **Main Website**: [https://ojpb2000.github.io/family-travel-complaints/](https://ojpb2000.github.io/family-travel-complaints/)
-- **Complete Analysis**: [https://ojpb2000.github.io/family-travel-complaints/Family_Travel_Analysis_Report_v2_Complete.html](https://ojpb2000.github.io/family-travel-complaints/Family_Travel_Analysis_Report_v2_Complete.html)
+- **Main Website (Complete Analysis)**: [https://ojpb2000.github.io/family-travel-complaints/](https://ojpb2000.github.io/family-travel-complaints/)
 - **Interactive Dashboard**: [https://ojpb2000.github.io/family-travel-complaints/Family_Travel_Complaints_Dashboard.html](https://ojpb2000.github.io/family-travel-complaints/Family_Travel_Complaints_Dashboard.html)
 
 ## 📄 License
