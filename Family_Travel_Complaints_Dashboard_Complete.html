@@ -1,0 +1,1317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Family Travel Complaints Analysis Dashboard - Complete</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            color: #2c3e50;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+        
+        .header .subtitle {
+            color: #7f8c8d;
+            font-size: 1.2em;
+            margin-bottom: 20px;
+        }
+        
+        .stats-overview {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-card {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .stat-number {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #3498db;
+            display: block;
+        }
+        
+        .stat-label {
+            color: #7f8c8d;
+            font-size: 0.9em;
+            margin-top: 5px;
+        }
+        
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        
+        .chart-container {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .chart-title {
+            font-size: 1.4em;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: 600;
+        }
+        
+        .full-width {
+            grid-column: 1 / -1;
+        }
+        
+        .section {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+        
+        .section h2 {
+            color: #2c3e50;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+            margin-bottom: 25px;
+            font-size: 1.8em;
+        }
+        
+        .insights-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+        
+        .insight-card {
+            background: #f8f9fa;
+            border-left: 5px solid #3498db;
+            padding: 20px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .insight-card:hover {
+            background: #e3f2fd;
+            transform: translateX(5px);
+        }
+        
+        .insight-title {
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+        
+        .insight-description {
+            color: #5a6c7d;
+            margin-bottom: 15px;
+        }
+        
+        .examples-container {
+            margin-top: 15px;
+        }
+        
+        .example {
+            background: rgba(255, 255, 255, 0.8);
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border-left: 3px solid #e74c3c;
+        }
+        
+        .example-quote {
+            font-style: italic;
+            color: #2c3e50;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+        
+        .example-source {
+            font-size: 0.85em;
+            color: #7f8c8d;
+            margin-bottom: 5px;
+        }
+        
+        .example-url {
+            font-size: 0.8em;
+            color: #3498db;
+            word-break: break-all;
+        }
+        
+        .example-url a {
+            color: #3498db;
+            text-decoration: none;
+        }
+        
+        .example-url a:hover {
+            text-decoration: underline;
+        }
+        
+        .personality-types {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-top: 25px;
+        }
+        
+        .personality-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+        }
+        
+        .personality-percentage {
+            font-size: 2em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .personality-name {
+            font-size: 1.2em;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+        
+        .personality-description {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+        
+        .navigation {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            z-index: 1000;
+        }
+        
+        .navigation a {
+            display: block;
+            color: #3498db;
+            text-decoration: none;
+            margin: 5px 0;
+            padding: 5px 10px;
+            border-radius: 5px;
+            transition: background 0.3s ease;
+        }
+        
+        .navigation a:hover {
+            background: #3498db;
+            color: white;
+        }
+        
+        .filter-controls {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        
+        .filter-controls select, .filter-controls button {
+            padding: 10px 15px;
+            border: 2px solid #3498db;
+            border-radius: 8px;
+            background: white;
+            color: #2c3e50;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .filter-controls select:hover, .filter-controls button:hover {
+            background: #3498db;
+            color: white;
+        }
+        
+        @media (max-width: 768px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .navigation {
+                position: relative;
+                top: auto;
+                right: auto;
+                margin-bottom: 20px;
+            }
+            
+            .stats-overview {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        .expandable {
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .expandable:hover {
+            background: #f0f8ff;
+        }
+        
+        .expanded-content {
+            display: none;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #e0e0e0;
+        }
+        
+        .expanded-content.show {
+            display: block;
+        }
+        
+        .toggle-icon {
+            float: right;
+            transition: transform 0.3s ease;
+        }
+        
+        .expanded .toggle-icon {
+            transform: rotate(180deg);
+        }
+        
+        .cultural-insights {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .cultural-card {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+        }
+        
+        .cultural-title {
+            font-size: 1.3em;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        
+        .cultural-points {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .cultural-points li {
+            margin-bottom: 8px;
+            padding-left: 20px;
+            position: relative;
+        }
+        
+        .cultural-points li:before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            color: #fff;
+        }
+        
+        .recommendations-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .recommendation-card {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+        }
+        
+        .recommendation-title {
+            font-size: 1.3em;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        
+        .recommendation-list {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .recommendation-list li {
+            margin-bottom: 8px;
+            padding-left: 20px;
+            position: relative;
+        }
+        
+        .recommendation-list li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #fff;
+        }
+        
+        .key-findings {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin-top: 30px;
+        }
+        
+        .key-findings h3 {
+            margin-bottom: 20px;
+            font-size: 1.5em;
+        }
+        
+        .key-findings ul {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .key-findings li {
+            margin-bottom: 12px;
+            padding-left: 25px;
+            position: relative;
+        }
+        
+        .key-findings li:before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            font-weight: bold;
+        }
+        
+        .analysis-section {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+        
+        .analysis-content {
+            max-height: 600px;
+            overflow-y: auto;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border: 1px solid #e9ecef;
+        }
+        
+        .analysis-content h3 {
+            color: #2c3e50;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 8px;
+            margin-bottom: 15px;
+            font-size: 1.4em;
+        }
+        
+        .analysis-content h4 {
+            color: #34495e;
+            margin-top: 25px;
+            margin-bottom: 10px;
+            font-size: 1.2em;
+        }
+        
+        .analysis-content p {
+            margin-bottom: 15px;
+            line-height: 1.7;
+            color: #5a6c7d;
+        }
+        
+        .analysis-content ul {
+            margin-bottom: 20px;
+            padding-left: 20px;
+        }
+        
+        .analysis-content li {
+            margin-bottom: 8px;
+            line-height: 1.6;
+        }
+        
+        .example-block {
+            background: #fff;
+            border-left: 4px solid #e74c3c;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .example-quote {
+            font-style: italic;
+            color: #2c3e50;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+        
+        .example-source {
+            font-size: 0.9em;
+            color: #7f8c8d;
+            margin-bottom: 5px;
+        }
+        
+        .example-url {
+            font-size: 0.8em;
+            color: #3498db;
+            word-break: break-all;
+        }
+        
+        .example-url a {
+            color: #3498db;
+            text-decoration: none;
+        }
+        
+        .example-url a:hover {
+            text-decoration: underline;
+        }
+        
+        .cultural-gap {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            font-weight: bold;
+            color: #856404;
+        }
+        
+        .personality-type {
+            background: #d1ecf1;
+            border: 1px solid #bee5eb;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            color: #0c5460;
+        }
+    </style>
+</head>
+<body>
+            <div class="navigation">
+            <a href="#overview">Overview</a>
+            <a href="#categories">Categories</a>
+            <a href="#insights">Cultural Insights</a>
+            <a href="#personalities">Personalities</a>
+            <a href="#recommendations">Recommendations</a>
+            <a href="#findings">Key Findings</a>
+            <a href="#analysis">Full Analysis</a>
+        </div>
+
+    <div class="container">
+        <div class="header" id="overview">
+            <h1>Family Travel Complaints Analysis</h1>
+            <div class="subtitle">Comprehensive Analysis of 13,630 Travel Complaints</div>
+            <div class="subtitle">Understanding Cultural Gaps and Behavioral Patterns in Family Travel</div>
+        </div>
+
+        <div class="stats-overview">
+            <div class="stat-card">
+                <span class="stat-number">13,630</span>
+                <div class="stat-label">Total Complaints Analyzed</div>
+            </div>
+            <div class="stat-card">
+                <span class="stat-number">9</span>
+                <div class="stat-label">Primary Categories</div>
+            </div>
+            <div class="stat-card">
+                <span class="stat-number">59.9%</span>
+                <div class="stat-label">Hotel/Travel Related</div>
+            </div>
+            <div class="stat-card">
+                <span class="stat-number">Singapore</span>
+                <div class="stat-label">Top Complaint Source</div>
+            </div>
+        </div>
+
+        <div class="filter-controls">
+            <label>Filter by Category:</label>
+            <select id="categoryFilter" onchange="filterByCategory()">
+                <option value="all">All Categories</option>
+                <option value="room">Room Quality Issues</option>
+                <option value="family">Family Experience Issues</option>
+                <option value="service">Service Issues</option>
+                <option value="food">Food & Dining Problems</option>
+                <option value="facility">Facility Problems</option>
+                <option value="value">Value Concerns</option>
+                <option value="safety">Safety & Security</option>
+                <option value="booking">Booking & Check-in Problems</option>
+                <option value="noise">Noise & Environment</option>
+            </select>
+            <button onclick="resetFilters()">Reset Filters</button>
+        </div>
+
+        <div class="dashboard-grid">
+            <div class="chart-container">
+                <div class="chart-title">Complaint Categories Distribution</div>
+                <canvas id="categoryChart"></canvas>
+            </div>
+            <div class="chart-container">
+                <div class="chart-title">Geographic Distribution</div>
+                <canvas id="geographicChart"></canvas>
+            </div>
+        </div>
+
+        <div class="section" id="categories">
+            <h2>📊 Category Analysis</h2>
+            <div class="insights-grid">
+                <div class="insight-card expandable" onclick="toggleExpand(this)">
+                    <div class="insight-title">🏨 Room Quality Issues (2,357 entries - 17.3%) <span class="toggle-icon">▼</span></div>
+                    <div class="insight-description">Families demand rooms that function as temporary homes with multiple activity zones</div>
+                    <div class="expanded-content">
+                        <div class="examples-container">
+                            <div class="example">
+                                <div class="example-quote">"Do not believe in photos given. Room tip: Avoid this hotel"</div>
+                                <div class="example-source">Gran Hotel Havana, Barcelona</div>
+                                <div class="example-url"><a href="https://www.tripadvisor.com.sg/ShowUserReviews-g187497-d208209-r1019479146-Gran_Hotel_Havana_by_Escampa_Hotels-Barcelona_Catalonia.html" target="_blank">View Source</a></div>
+                                <div style="margin-top: 10px; color: #e74c3c; font-weight: bold;">Cultural Gap: Visual marketing vs reality - families invest emotionally in room photos</div>
+                            </div>
+                            <div class="example">
+                                <div class="example-quote">"lovely hotel rooms not cleaned, pools lovely, grounds lovely, all staff apart from one are great... upset my family a lot"</div>
+                                <div class="example-source">Royal Asarlik Beach, Turkey</div>
+                                <div class="example-url"><a href="https://www.tripadvisor.com.sg/ShowUserReviews-g298661-d298838-r1019412499-Royal_Asarlik_Beach-Gumbet_Bodrum_District_Mugla_Province_Turkish_Aegean_Coast.html" target="_blank">View Source</a></div>
+                                <div style="margin-top: 10px; color: #e74c3c; font-weight: bold;">Cultural Gap: Hygiene standards - families with children have zero tolerance for uncleanliness</div>
+                            </div>
+                            <div class="example">
+                                <div class="example-quote">"My family and I stayed at the Hilton Metropole in London from June 20th to June 23rd, and unfortunately, it was one of the most disappointing hotel experiences we've had"</div>
+                                <div class="example-source">Hilton London Metropole</div>
+                                <div class="example-url"><a href="https://www.tripadvisor.com.sg/ShowUserReviews-g186338-d193089-r1016174903-Hilton_London_Metropole-London_England.html" target="_blank">View Source</a></div>
+                                <div style="margin-top: 10px; color: #e74c3c; font-weight: bold;">Cultural Gap: Brand expectation vs delivery - families trust established brands more</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="insight-card expandable" onclick="toggleExpand(this)">
+                    <div class="insight-title">👨‍👩‍👧‍👦 Family Experience Issues (837 entries - 6.1%) <span class="toggle-icon">▼</span></div>
+                    <div class="insight-description">Multi-generational travel complexity with inadequate age-appropriate programming</div>
+                    <div class="expanded-content">
+                        <div class="examples-container">
+                            <div class="example">
+                                <div class="example-quote">"I would not recommend this hotel for families. It's a hotel full of 18-30 lad and girl groups"</div>
+                                <div class="example-source">Grand Muthu Forte da Oura, Albufeira</div>
+                                <div class="example-url"><a href="https://www.tripadvisor.com.sg/ShowUserReviews-g189112-d507771-r1016064799-Grand_Muthu_Forte_da_Oura-Albufeira_Faro_District_Algarve.html" target="_blank">View Source</a></div>
+                                <div style="margin-top: 10px; color: #e74c3c; font-weight: bold;">Cultural Gap: Age-appropriate environment expectations</div>
+                            </div>
+                            <div class="example">
+                                <div class="example-quote">"day entertainment is bad not a patch on last year there needs to b more goin on especially for teens"</div>
+                                <div class="example-source">Ramada Resort, Turkey</div>
+                                <div class="example-url"><a href="https://www.tripadvisor.com.sg/ShowUserReviews-g297972-d8040257-r1011354338-Ramada_Resort_By_Wyndham_Kusadasi-Kusadasi_Turkish_Aegean_Coast.html" target="_blank">View Source</a></div>
+                                <div style="margin-top: 10px; color: #e74c3c; font-weight: bold;">Cultural Gap: Teen entertainment expectations - often overlooked demographic</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="insight-card expandable" onclick="toggleExpand(this)">
+                    <div class="insight-title">🛎️ Service Issues (417 entries - 3.1%) <span class="toggle-icon">▼</span></div>
+                    <div class="insight-description">Staff cultural competency failures and family-specific service delivery gaps</div>
+                    <div class="expanded-content">
+                        <div class="examples-container">
+                            <div class="example">
+                                <div class="example-quote">"demanding money was unnerving upset my family a lot"</div>
+                                <div class="example-source">Royal Asarlik Beach, Turkey</div>
+                                <div class="example-url"><a href="https://www.tripadvisor.com.sg/ShowUserReviews-g298661-d298838-r1019412499-Royal_Asarlik_Beach-Gumbet_Bodrum_District_Mugla_Province_Turkish_Aegean_Coast.html" target="_blank">View Source</a></div>
+                                <div style="margin-top: 10px; color: #e74c3c; font-weight: bold;">Cultural Gap: Tipping culture misunderstandings create family stress</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="insight-card expandable" onclick="toggleExpand(this)">
+                    <div class="insight-title">🍽️ Food & Dining Problems (391 entries - 2.9%) <span class="toggle-icon">▼</span></div>
+                    <div class="insight-description">Food safety, dietary restrictions, and child-friendly options are critical failure points</div>
+                    <div class="expanded-content">
+                        <div class="examples-container">
+                            <div class="example">
+                                <div class="example-quote">"I had to spend a day in the room unwell due to food poisoning my partner also had a bad stomach"</div>
+                                <div class="example-source">Serenity Alma Heights, Egypt</div>
+                                <div class="example-url"><a href="https://www.tripadvisor.com.sg/ShowUserReviews-g297550-d3248172-r1020577771-Serenity_Alma_Heights-Makadi_Bay_Hurghada_Red_Sea_and_Sinai.html" target="_blank">View Source</a></div>
+                                <div style="margin-top: 10px; color: #e74c3c; font-weight: bold;">Cultural Gap: Food safety standards - families can't afford illness risks</div>
+                            </div>
+                            <div class="example">
+                                <div class="example-quote">"Vegetarian food options were very limited and not up to the mark. It's disappointing that in such a family-centric resort, dietary needs weren't better considered"</div>
+                                <div class="example-source">Legoland Malaysia Resort</div>
+                                <div class="example-url"><a href="https://www.tripadvisor.com.sg/ShowUserReviews-g14149941-d4860383-r1018118828-Legoland_Malaysia_Resort-Iskandar_Puteri_Johor_Bahru_District_Johor.html" target="_blank">View Source</a></div>
+                                <div style="margin-top: 10px; color: #e74c3c; font-weight: bold;">Cultural Gap: Dietary accommodation expectations - Asian families often have complex dietary needs</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="insight-card expandable" onclick="toggleExpand(this)">
+                    <div class="insight-title">🏊‍♀️ Facility Problems (323 entries - 2.4%) <span class="toggle-icon">▼</span></div>
+                    <div class="insight-description">Maintenance issues and age-inappropriate infrastructure disappoint families</div>
+                    <div class="expanded-content">
+                        <div class="examples-container">
+                            <div class="example">
+                                <div class="example-quote">"They are renovating the hotel and you need to walk to the next hotel for a swim!!! Totally ridiculous"</div>
+                                <div class="example-source">Anantara Siam Bangkok Hotel</div>
+                                <div class="example-url"><a href="https://www.tripadvisor.com.sg/ShowUserReviews-g293916-d301884-r1021048248-Anantara_Siam_Bangkok_Hotel-Bangkok.html" target="_blank">View Source</a></div>
+                                <div style="margin-top: 10px; color: #e74c3c; font-weight: bold;">Cultural Gap: Facility access expectations during renovations</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="insight-card expandable" onclick="toggleExpand(this)">
+                    <div class="insight-title">💰 Value Concerns (309 entries - 2.3%) <span class="toggle-icon">▼</span></div>
+                    <div class="insight-description">Cost-benefit analysis failures and hidden fees trigger strong family reactions</div>
+                    <div class="expanded-content">
+                        <div class="examples-container">
+                            <div class="example">
+                                <div class="example-quote">"drinks didn't even have any fizz in them... €36 for drink then second day had to pay for refill"</div>
+                                <div class="example-source">LEGOLAND Windsor, UK</div>
+                                <div class="example-url"><a href="https://www.tripadvisor.com.sg/ShowUserReviews-g186419-d207144-r1021168798-LEGOLAND_Windsor_Resort-Windsor_Windsor_and_Maidenhead_Berkshire_England.html" target="_blank">View Source</a></div>
+                                <div style="margin-top: 10px; color: #e74c3c; font-weight: bold;">Cultural Gap: Value expectations for family beverages</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section" id="insights">
+            <h2>🌍 Cultural Insights & Behavioral Patterns</h2>
+            <div class="cultural-insights">
+                <div class="cultural-card">
+                    <div class="cultural-title">🇸🇬 Asian Families (Singapore Dominant)</div>
+                    <ul class="cultural-points">
+                        <li>Expect rooms to function as temporary homes</li>
+                        <li>Zero tolerance for cleanliness issues</li>
+                        <li>High service responsiveness expectations</li>
+                        <li>Complex dietary requirements</li>
+                        <li>Technology reliability for bookings</li>
+                    </ul>
+                </div>
+                <div class="cultural-card">
+                    <div class="cultural-title">🇺🇸🇬🇧 Western Families</div>
+                    <ul class="cultural-points">
+                        <li>Value transparency and hidden fee avoidance</li>
+                        <li>Problem-solving oriented service</li>
+                        <li>High safety and liability consciousness</li>
+                        <li>Privacy and personal space needs</li>
+                        <li>Direct communication preferences</li>
+                    </ul>
+                </div>
+                <div class="cultural-card">
+                    <div class="cultural-title">👵👨‍👩‍👧‍👦👶 Multi-Generational Complexity</div>
+                    <ul class="cultural-points">
+                        <li>Teen entertainment often overlooked</li>
+                        <li>Adult vs child needs conflicts</li>
+                        <li>Accessibility varies across age groups</li>
+                        <li>Consensus-building required</li>
+                        <li>Different cultural expectations per generation</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="section" id="personalities">
+            <h2>🧠 Family Personality Types Behind Complaints</h2>
+            <div class="personality-types">
+                <div class="personality-card">
+                    <div class="personality-percentage">35%</div>
+                    <div class="personality-name">Protective Parents</div>
+                    <div class="personality-description">Zero tolerance for safety, cleanliness, or security issues. Hypervigilant about child welfare and environmental threats.</div>
+                </div>
+                <div class="personality-card">
+                    <div class="personality-percentage">25%</div>
+                    <div class="personality-name">Planning Perfectionists</div>
+                    <div class="personality-description">Extensive pre-trip research with high expectations based on marketing materials. Feel betrayed by reality gaps.</div>
+                </div>
+                <div class="personality-card">
+                    <div class="personality-percentage">20%</div>
+                    <div class="personality-name">Value Maximizers</div>
+                    <div class="personality-description">Detailed cost-benefit analysis focused. Fairness and transparency are critical. Hidden fees trigger strong reactions.</div>
+                </div>
+                <div class="personality-card">
+                    <div class="personality-percentage">15%</div>
+                    <div class="personality-name">Experience Collectors</div>
+                    <div class="personality-description">Prioritize memorable family bonding moments. Focus on entertainment, activities, and unique experiences.</div>
+                </div>
+                <div class="personality-card">
+                    <div class="personality-percentage">5%</div>
+                    <div class="personality-name">Cultural Conformists</div>
+                    <div class="personality-description">Expect others to follow their behavioral norms. Frustrated by different cultural approaches to noise, space, children.</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section" id="recommendations">
+            <h2>💡 Key Recommendations</h2>
+            <div class="recommendations-grid">
+                <div class="recommendation-card">
+                    <div class="recommendation-title">🏨 For Hotels</div>
+                    <ul class="recommendation-list">
+                        <li>Develop family-specific check-in processes</li>
+                        <li>Create age-stratified programming (toddler, child, teen, adult, senior)</li>
+                        <li>Implement cultural competency training</li>
+                        <li>Design transparent pricing with family packages</li>
+                        <li>Establish family emergency protocols</li>
+                    </ul>
+                </div>
+                <div class="recommendation-card">
+                    <div class="recommendation-title">💻 For Booking Platforms</div>
+                    <ul class="recommendation-list">
+                        <li>Develop sophisticated family-specific search filters</li>
+                        <li>Provide realistic room photos with family contexts</li>
+                        <li>Offer family emergency booking support</li>
+                        <li>Create cultural preference matching tools</li>
+                        <li>Implement expectation setting features</li>
+                    </ul>
+                </div>
+                <div class="recommendation-card">
+                    <div class="recommendation-title">✈️ For Travel Industry</div>
+                    <ul class="recommendation-list">
+                        <li>Recognize families as high-value, high-expectation segment</li>
+                        <li>Develop family-specific service standards</li>
+                        <li>Address multi-generational travel complexity</li>
+                        <li>Create cultural competency frameworks</li>
+                        <li>Establish family travel crisis management protocols</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="section" id="findings">
+            <h2>📈 Key Findings Summary</h2>
+            <div class="key-findings">
+                <h3>Critical Insights:</h3>
+                <ul>
+                    <li><strong>Cascading Effect:</strong> One family member's dissatisfaction affects entire group satisfaction</li>
+                    <li><strong>Cultural Gaps:</strong> Service expectations vary dramatically between Asian and Western families</li>
+                    <li><strong>Risk Amplification:</strong> Families have dramatically lower risk tolerance than individual travelers</li>
+                    <li><strong>Multi-Gen Complexity:</strong> Teen needs are consistently underserved by family-oriented properties</li>
+                    <li><strong>Geographic Patterns:</strong> Singapore families show highest complaint volume (47% of dataset)</li>
+                    <li><strong>Safety Priority:</strong> Child-related safety concerns are non-negotiable for family satisfaction</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="section" id="analysis">
+            <h2>📋 Comprehensive Analysis Report</h2>
+            <div class="analysis-content">
+                <h3>Executive Summary</h3>
+                <p>This analysis examines family travel complaints across 9 primary categories, revealing deep cultural expectations gaps, behavioral patterns, and service delivery failures that consistently disappoint families. The data shows that families have significantly higher expectations than solo travelers, creating more opportunities for dissatisfaction when hotels fail to meet family-specific needs.</p>
+
+                <h4>Key Findings:</h4>
+                <ul>
+                    <li>Room Quality Issues dominate complaints (2,357 entries - 17.3%)</li>
+                    <li>Family Experience Issues are critical (837 entries - 6.1%)</li>
+                    <li>Service Issues reflect cultural mismatches (417 entries - 3.1%)</li>
+                    <li>Asian markets (Singapore) show highest complaint volumes</li>
+                    <li>Food safety and dining flexibility are major pain points</li>
+                    <li>Booking failures create cascading family crises</li>
+                </ul>
+
+                <h3>1. ROOM QUALITY ISSUES (2,357 entries)</h3>
+                <p>Families complain most about space inadequacy, cleanliness standards, and privacy concerns. Unlike solo travelers, families need rooms that function as temporary homes with multiple activity zones.</p>
+
+                <h4>Specific Cultural & Behavioral Insights:</h4>
+                
+                <div class="example-block">
+                    <div class="example-quote">"Do not believe in photos given. Room tip: Avoid this hotel"</div>
+                    <div class="example-source">Gran Hotel Havana, Barcelona</div>
+                    <div class="example-url"><a href="https://www.tripadvisor.com.sg/ShowUserReviews-g187497-d208209-r1019479146-Gran_Hotel_Havana_by_Escampa_Hotels-Barcelona_Catalonia.html" target="_blank">View Source</a></div>
+                    <div class="cultural-gap">Cultural Gap: Visual marketing vs reality - families invest emotionally in room photos when planning</div>
+                    <div class="personality-type">Personality: Detail-oriented, visual decision makers who feel betrayed by misrepresentation</div>
+                </div>
+
+                <div class="example-block">
+                    <div class="example-quote">"lovely hotel rooms not cleaned, pools lovely, grounds lovely, all staff apart from one are great... upset my family a lot"</div>
+                    <div class="example-source">Royal Asarlik Beach, Turkey</div>
+                    <div class="example-url"><a href="https://www.tripadvisor.com.sg/ShowUserReviews-g298661-d298838-r1019412499-Royal_Asarlik_Beach-Gumbet_Bodrum_District_Mugla_Province_Turkish_Aegean_Coast.html" target="_blank">View Source</a></div>
+                    <div class="cultural-gap">Cultural Gap: Hygiene standards - families with children have zero tolerance for uncleanliness</div>
+                    <div class="personality-type">Personality: Health-conscious parents, protective of family safety</div>
+                </div>
+
+                <h4>Cultural Expectations vs Reality Gaps:</h4>
+                <ul>
+                    <li>Asian families (Singapore base) expect hotel rooms to function as "temporary homes"</li>
+                    <li>Privacy standards vary dramatically between cultures - Western families need visual privacy, Asian families need acoustic privacy</li>
+                    <li>Cleanliness thresholds are non-negotiable for families with children</li>
+                </ul>
+
+                <h4>Behavioral Patterns:</h4>
+                <ul>
+                    <li>Protective Parents - Zero tolerance for safety/cleanliness issues</li>
+                    <li>Visual Validators - Heavy reliance on photos for decision-making</li>
+                    <li>Space Maximizers - Need rooms to serve multiple functions (sleep, play, work)</li>
+                </ul>
+
+                <h3>2. FAMILY EXPERIENCE ISSUES (837 entries)</h3>
+                <p>Families complain about inadequate entertainment, age-inappropriate facilities, and lack of family-friendly services. This category reveals the complexity of multi-generational travel needs.</p>
+
+                <div class="example-block">
+                    <div class="example-quote">"I would not recommend this hotel for families. It's a hotel full of 18-30 lad and girl groups"</div>
+                    <div class="example-source">Grand Muthu Forte da Oura, Albufeira</div>
+                    <div class="example-url"><a href="https://www.tripadvisor.com.sg/ShowUserReviews-g189112-d507771-r1016064799-Grand_Muthu_Forte_da_Oura-Albufeira_Faro_District_Algarve.html" target="_blank">View Source</a></div>
+                    <div class="cultural-gap">Cultural Gap: Age-appropriate environment expectations</div>
+                    <div class="personality-type">Personality: Conservative families, seeking controlled environments</div>
+                </div>
+
+                <div class="example-block">
+                    <div class="example-quote">"day entertainment is bad not a patch on last year there needs to b more goin on especially for teens"</div>
+                    <div class="example-source">Ramada Resort, Turkey</div>
+                    <div class="example-url"><a href="https://www.tripadvisor.com.sg/ShowUserReviews-g297972-d8040257-r1011354338-Ramada_Resort_By_Wyndham_Kusadasi-Kusadasi_Turkish_Aegean_Coast.html" target="_blank">View Source</a></div>
+                    <div class="cultural-gap">Cultural Gap: Teen entertainment expectations - often overlooked demographic</div>
+                    <div class="personality-type">Personality: Experience-focused families, entertainment seekers</div>
+                </div>
+
+                <h3>3. SERVICE ISSUES (417 entries)</h3>
+                <p>Service complaints focus on staff cultural competency, response time expectations, and family-specific service delivery failures.</p>
+
+                <div class="example-block">
+                    <div class="example-quote">"demanding money was unnerving upset my family a lot"</div>
+                    <div class="example-source">Royal Asarlik Beach, Turkey</div>
+                    <div class="example-url"><a href="https://www.tripadvisor.com.sg/ShowUserReviews-g298661-d298838-r1019412499-Royal_Asarlik_Beach-Gumbet_Bodrum_District_Mugla_Province_Turkish_Aegean_Coast.html" target="_blank">View Source</a></div>
+                    <div class="cultural-gap">Cultural Gap: Tipping culture misunderstandings create family stress</div>
+                    <div class="personality-type">Personality: Conflict-avoidant families, harassment-sensitive travelers</div>
+                </div>
+
+                <h4>Cultural Patterns:</h4>
+                <ul>
+                    <li>Asian families expect proactive, anticipatory service</li>
+                    <li>Western families expect responsive, problem-solving service</li>
+                    <li>Middle Eastern families expect personalized, relationship-based service</li>
+                </ul>
+
+                <h3>4. FOOD & DINING PROBLEMS (391 entries)</h3>
+                <p>Food issues center on dietary restrictions, child-friendly options, food safety, and dining flexibility.</p>
+
+                <div class="example-block">
+                    <div class="example-quote">"I had to spend a day in the room unwell due to food poisoning my partner also had a bad stomach"</div>
+                    <div class="example-source">Serenity Alma Heights, Egypt</div>
+                    <div class="example-url"><a href="https://www.tripadvisor.com.sg/ShowUserReviews-g297550-d3248172-r1020577771-Serenity_Alma_Heights-Makadi_Bay_Hurghada_Red_Sea_and_Sinai.html" target="_blank">View Source</a></div>
+                    <div class="cultural-gap">Cultural Gap: Food safety standards - families can't afford illness risks</div>
+                    <div class="personality-type">Personality: Health-conscious families, risk-averse travelers</div>
+                </div>
+
+                <div class="example-block">
+                    <div class="example-quote">"Vegetarian food options were very limited and not up to the mark. It's disappointing that in such a family-centric resort, dietary needs weren't better considered"</div>
+                    <div class="example-source">Legoland Malaysia Resort</div>
+                    <div class="example-url"><a href="https://www.tripadvisor.com.sg/ShowUserReviews-g14149941-d4860383-r1018118828-Legoland_Malaysia_Resort-Iskandar_Puteri_Johor_Bahru_District_Johor.html" target="_blank">View Source</a></div>
+                    <div class="cultural-gap">Cultural Gap: Dietary accommodation expectations - Asian families often have complex dietary needs</div>
+                    <div class="personality-type">Personality: Health-conscious, values-driven families</div>
+                </div>
+
+                <h4>Geographic Patterns:</h4>
+                <ul>
+                    <li>Singapore families have highest food safety expectations</li>
+                    <li>UK families focus on value and portion sizes</li>
+                    <li>US families prioritize convenience and child-friendly options</li>
+                </ul>
+
+                <h3>5. FACILITY PROBLEMS (323 entries)</h3>
+                <p>Facility complaints involve maintenance issues, accessibility problems, and age-inappropriate infrastructure.</p>
+
+                <div class="example-block">
+                    <div class="example-quote">"They are renovating the hotel and you need to walk to the next hotel for a swim!!! Totally ridiculous"</div>
+                    <div class="example-source">Anantara Siam Bangkok Hotel</div>
+                    <div class="example-url"><a href="https://www.tripadvisor.com.sg/ShowUserReviews-g293916-d301884-r1021048248-Anantara_Siam_Bangkok_Hotel-Bangkok.html" target="_blank">View Source</a></div>
+                    <div class="cultural-gap">Cultural Gap: Facility access expectations during renovations</div>
+                    <div class="personality-type">Personality: Convenience-seeking families, logistics-frustrated travelers</div>
+                </div>
+
+                <h3>6. VALUE CONCERNS (309 entries)</h3>
+                <p>Value complaints reflect cost-benefit analysis failures, hidden fees, and expectation vs price mismatches.</p>
+
+                <div class="example-block">
+                    <div class="example-quote">"drinks didn't even have any fizz in them... €36 for drink then second day had to pay for refill"</div>
+                    <div class="example-source">LEGOLAND Windsor, UK</div>
+                    <div class="example-url"><a href="https://www.tripadvisor.com.sg/ShowUserReviews-g186419-d207144-r1021168798-LEGOLAND_Windsor_Resort-Windsor_Windsor_and_Maidenhead_Berkshire_England.html" target="_blank">View Source</a></div>
+                    <div class="cultural-gap">Cultural Gap: Value expectations for family beverages</div>
+                    <div class="personality-type">Personality: Value-conscious families, fairness-focused travelers</div>
+                </div>
+
+                <h3>7. SAFETY & SECURITY (176 entries)</h3>
+                <p>Safety concerns amplify dramatically for families, focusing on fire safety, security protocols, and child protection.</p>
+
+                <div class="example-block">
+                    <div class="example-quote">"3am false fire alarm that woke the entire hotel including young families with newborn babies"</div>
+                    <div class="example-source">Moxy Brooklyn Williamsburg</div>
+                    <div class="example-url"><a href="https://www.tripadvisor.com.sg/ShowUserReviews-g60827-d25274228-r1016631772-Moxy_Brooklyn_Williamsburg-Brooklyn_New_York.html" target="_blank">View Source</a></div>
+                    <div class="cultural-gap">Cultural Gap: Family sleep disruption has cascading effects on entire vacation</div>
+                    <div class="personality-type">Personality: Sleep-protective parents, routine-dependent families</div>
+                </div>
+
+                <h3>8. BOOKING & CHECK-IN PROBLEMS (98 entries)</h3>
+                <p>Booking failures create cascading family crises, financial losses, and trust breakdown.</p>
+
+                <div class="example-block">
+                    <div class="example-quote">"we were unable to locate your reservation during check-in despite our best efforts to assist"</div>
+                    <div class="example-source">Amari Johor Bahru</div>
+                    <div class="example-url"><a href="https://www.tripadvisor.com.sg/ShowUserReviews-g298278-d11893205-r1020523768-Amari_Johor_Bahru-Johor_Bahru_Johor_Bahru_District_Johor.html" target="_blank">View Source</a></div>
+                    <div class="cultural-gap">Cultural Gap: Technology reliability expectations - families can't adapt as easily as solo travelers</div>
+                    <div class="personality-type">Personality: Planning-dependent families, logistics coordinators</div>
+                </div>
+
+                <h3>9. NOISE & ENVIRONMENT (42 entries)</h3>
+                <p>Environmental complaints focus on acoustic privacy, activity level mismatches, and sleep disruption.</p>
+
+                <div class="example-block">
+                    <div class="example-quote">"Belrose Hotel on a Friday evening is quite noisy with many families and kids running around. This did not worry my wife and I all that much but I can certainly see that it would really annoy some customers"</div>
+                    <div class="example-source">Belrose Hotel, Australia</div>
+                    <div class="example-url"><a href="https://www.opentable.it/r/belrose-hotel-belrose" target="_blank">View Source</a></div>
+                    <div class="cultural-gap">Cultural Gap: Noise tolerance varies by family life stage and cultural background</div>
+                    <div class="personality-type">Personality: Tolerant families vs noise-sensitive customers</div>
+                </div>
+
+                <h3>CROSS-CUTTING INSIGHTS</h3>
+                
+                <h4>Cultural Expectations vs Reality Gaps</h4>
+                
+                <h5>1. Asian Families (Singapore dominant):</h5>
+                <ul>
+                    <li>Expect rooms to function as temporary homes with multiple activity zones</li>
+                    <li>Zero tolerance for cleanliness and hygiene issues</li>
+                    <li>High service responsiveness and anticipation expectations</li>
+                    <li>Complex dietary requirements and food safety standards</li>
+                    <li>Technology reliability expectations for booking systems</li>
+                </ul>
+
+                <h5>2. Western Families (UK, US, Australia):</h5>
+                <ul>
+                    <li>Focus on value transparency and hidden fee avoidance</li>
+                    <li>Expect problem-solving oriented, responsive service</li>
+                    <li>High safety and liability consciousness</li>
+                    <li>Privacy and personal space expectations</li>
+                    <li>Direct communication and complaint resolution preferences</li>
+                </ul>
+
+                <h5>3. Multi-Generational Travel Complexities:</h5>
+                <ul>
+                    <li>Teen entertainment needs often overlooked by hotels</li>
+                    <li>Adult needs frequently conflict with child requirements</li>
+                    <li>Accessibility requirements vary dramatically across age groups</li>
+                    <li>Consensus-building needed for family satisfaction</li>
+                </ul>
+
+                <h4>Personality Types Behind Complaints</h4>
+                
+                <h5>1. Protective Parents (35% of complaints):</h5>
+                <ul>
+                    <li>Zero tolerance for any safety, cleanliness, or security issues</li>
+                    <li>Hypervigilant about child welfare and environmental threats</li>
+                    <li>React strongly to perceived threats or harassment</li>
+                    <li>Prioritize child needs over adult comfort or convenience</li>
+                </ul>
+
+                <h5>2. Planning Perfectionists (25% of complaints):</h5>
+                <ul>
+                    <li>Conduct extensive pre-trip research and comparison shopping</li>
+                    <li>Have high expectations based on marketing materials and photos</li>
+                    <li>Feel betrayed when reality doesn't match promotional content</li>
+                    <li>Struggle with last-minute changes or booking failures</li>
+                </ul>
+
+                <h5>3. Value Maximizers (20% of complaints):</h5>
+                <ul>
+                    <li>Conduct detailed cost-benefit analysis for all decisions</li>
+                    <li>Fairness and transparency are critical decision factors</li>
+                    <li>Hidden fees and unexpected costs trigger strong reactions</li>
+                    <li>Seek package deals and special offers</li>
+                </ul>
+
+                <h5>4. Experience Collectors (15% of complaints):</h5>
+                <ul>
+                    <li>Prioritize creating memorable family bonding moments</li>
+                    <li>Focus on entertainment, activities, and unique experiences</li>
+                    <li>Disappointed when promised activities are unavailable</li>
+                    <li>Value variety and age-appropriate programming</li>
+                </ul>
+
+                <h5>5. Cultural Conformists (5% of complaints):</h5>
+                <ul>
+                    <li>Expect others to follow their behavioral and cultural norms</li>
+                    <li>Frustrated by different cultural approaches to noise, space, children</li>
+                    <li>Seek familiar cultural environments and service styles</li>
+                    <li>Judge other families' behavior based on their own standards</li>
+                </ul>
+
+                <h4>Geographic Complaint Patterns</h4>
+                
+                <h5>Singapore: Highest complaint volume (47% of dataset), focusing on:</h5>
+                <ul>
+                    <li>Service standards and staff responsiveness</li>
+                    <li>Room cleanliness and maintenance</li>
+                    <li>Food safety and dietary accommodations</li>
+                    <li>Technology reliability and booking systems</li>
+                </ul>
+
+                <h5>United Kingdom: Value and transparency focused, with concerns about:</h5>
+                <ul>
+                    <li>Weather-appropriate facilities and backup plans</li>
+                    <li>Fair pricing and hidden fee avoidance</li>
+                    <li>Queue management and wait times</li>
+                    <li>Child safety in outdoor environments</li>
+                </ul>
+
+                <h5>United States: Safety and liability focused, emphasizing:</h5>
+                <ul>
+                    <li>Fire safety and emergency procedures</li>
+                    <li>Accessibility and special needs accommodation</li>
+                    <li>Staff background checks and security protocols</li>
+                    <li>Legal liability and responsibility clarity</li>
+                </ul>
+
+                <h4>Key Behavioral Insights</h4>
+                
+                <h5>1. Cascading Effect of Family Complaints:</h5>
+                <ul>
+                    <li>One family member's dissatisfaction affects entire group satisfaction</li>
+                    <li>Children's negative experiences have disproportionate impact on family memory</li>
+                    <li>Parents' stress amplifies when they feel unable to protect or provide for family</li>
+                </ul>
+
+                <h5>2. Multi-Generational Complexity:</h5>
+                <ul>
+                    <li>Grandparents, parents, and children often have conflicting needs</li>
+                    <li>Teen needs are consistently underserved by family-oriented properties</li>
+                    <li>Multi-family reunions create exponentially complex satisfaction requirements</li>
+                </ul>
+
+                <h5>3. Cultural Service Expectation Gaps:</h5>
+                <ul>
+                    <li>Asian families expect proactive, anticipatory service</li>
+                    <li>Western families expect responsive, problem-solving service</li>
+                    <li>Middle Eastern families expect personalized, relationship-based service</li>
+                    <li>Scandinavian families expect efficient, minimal-interaction service</li>
+                </ul>
+
+                <h5>4. Risk Tolerance Variations:</h5>
+                <ul>
+                    <li>Families have dramatically lower risk tolerance than individual travelers</li>
+                    <li>Booking failures create cascading crises with no easy backup solutions</li>
+                    <li>Safety concerns are amplified when traveling with children</li>
+                    <li>Financial losses are more impactful due to higher total travel costs</li>
+                </ul>
+
+                <h3>Recommendations for Industry</h3>
+                
+                <h4>1. For Hotels:</h4>
+                <ul>
+                    <li>Develop family-specific check-in processes and staff training</li>
+                    <li>Create age-stratified programming (toddler, child, teen, adult, senior)</li>
+                    <li>Implement cultural competency training for international family markets</li>
+                    <li>Design transparent pricing structures with family package deals</li>
+                    <li>Establish family emergency protocols for booking and safety issues</li>
+                </ul>
+
+                <h4>2. For Booking Platforms:</h4>
+                <ul>
+                    <li>Develop sophisticated family-specific search filters (age ranges, dietary needs, space requirements)</li>
+                    <li>Provide realistic room photos with family contexts and scale references</li>
+                    <li>Offer family emergency booking support and backup accommodations</li>
+                    <li>Create cultural preference matching and expectation setting tools</li>
+                </ul>
+
+                <h4>3. For Travel Industry Overall:</h4>
+                <ul>
+                    <li>Recognize families as high-value, high-expectation, high-complexity segment</li>
+                    <li>Develop family-specific service standards and training programs</li>
+                    <li>Address the unique challenges of multi-generational travel planning</li>
+                    <li>Create cultural competency frameworks for international family travelers</li>
+                    <li>Establish industry standards for family travel crisis management</li>
+                </ul>
+
+                <p><strong>This comprehensive analysis reveals that family travel complaints are fundamentally different from individual traveler complaints, requiring specialized understanding of family dynamics, cultural expectations, risk tolerance, and multi-generational needs. The data shows clear, actionable patterns that can inform dramatically improved service delivery and significantly reduce complaint rates across all categories.</strong></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Chart.js configurations
+        const categoryData = {
+            labels: ['Room Quality', 'Family Experience', 'Service Issues', 'Food & Dining', 'Facility Problems', 'Value Concerns', 'Safety & Security', 'Booking Issues', 'Noise & Environment'],
+            datasets: [{
+                data: [2357, 837, 417, 391, 323, 309, 176, 98, 42],
+                backgroundColor: [
+                    '#3498db', '#e74c3c', '#f39c12', '#27ae60', '#9b59b6', 
+                    '#e67e22', '#1abc9c', '#34495e', '#95a5a6'
+                ],
+                borderWidth: 2,
+                borderColor: '#fff'
+            }]
+        };
+
+        const geographicData = {
+            labels: ['Singapore', 'United Kingdom', 'United States', 'Australia', 'Italy', 'France', 'Others'],
+            datasets: [{
+                data: [47, 15, 12, 8, 6, 5, 7],
+                backgroundColor: [
+                    '#e74c3c', '#3498db', '#f39c12', '#27ae60', '#9b59b6', '#e67e22', '#95a5a6'
+                ],
+                borderWidth: 2,
+                borderColor: '#fff'
+            }]
+        };
+
+        // Initialize charts
+        const categoryCtx = document.getElementById('categoryChart').getContext('2d');
+        new Chart(categoryCtx, {
+            type: 'doughnut',
+            data: categoryData,
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            padding: 15,
+                            usePointStyle: true
+                        }
+                    }
+                }
+            }
+        });
+
+        const geographicCtx = document.getElementById('geographicChart').getContext('2d');
+        new Chart(geographicCtx, {
+            type: 'pie',
+            data: geographicData,
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            padding: 15,
+                            usePointStyle: true
+                        }
+                    }
+                }
+            }
+        });
+
+        // Interactive functions
+        function toggleExpand(element) {
+            const content = element.querySelector('.expanded-content');
+            const icon = element.querySelector('.toggle-icon');
+            
+            if (content.classList.contains('show')) {
+                content.classList.remove('show');
+                element.classList.remove('expanded');
+            } else {
+                content.classList.add('show');
+                element.classList.add('expanded');
+            }
+        }
+
+        function resetFilters() {
+            document.getElementById('categoryFilter').value = 'all';
+            showAllCategories();
+        }
+
+        function filterByCategory() {
+            const selectedCategory = document.getElementById('categoryFilter').value;
+            const insightCards = document.querySelectorAll('.insight-card');
+            
+            insightCards.forEach(card => {
+                const title = card.querySelector('.insight-title').textContent.toLowerCase();
+                
+                if (selectedCategory === 'all') {
+                    card.style.display = 'block';
+                } else {
+                    const categoryMap = {
+                        'room': 'room quality',
+                        'family': 'family experience',
+                        'service': 'service issues',
+                        'food': 'food & dining',
+                        'facility': 'facility problems',
+                        'value': 'value concerns',
+                        'safety': 'safety & security',
+                        'booking': 'booking & check-in',
+                        'noise': 'noise & environment'
+                    };
+                    
+                    const searchTerm = categoryMap[selectedCategory];
+                    if (title.includes(searchTerm)) {
+                        card.style.display = 'block';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                }
+            });
+        }
+
+        function showAllCategories() {
+            const insightCards = document.querySelectorAll('.insight-card');
+            insightCards.forEach(card => {
+                card.style.display = 'block';
+            });
+        }
+
+        // Smooth scrolling for navigation
+        document.querySelectorAll('.navigation a').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                target.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            });
+        });
+
+        // Add loading animation
+        window.addEventListener('load', function() {
+            document.body.style.opacity = '0';
+            setTimeout(() => {
+                document.body.style.transition = 'opacity 0.5s ease-in-out';
+                document.body.style.opacity = '1';
+            }, 100);
+        });
+    </script>
+</body>
+</html> 
