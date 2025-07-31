@@ -87,6 +87,12 @@ This project analyzes family travel complaints from a dataset of 13,630 classifi
 
 ## 📈 Usage
 
+### 🌐 Online Access
+- **Visit the live website**: [https://ojpb2000.github.io/family-travel-complaints/](https://ojpb2000.github.io/family-travel-complaints/)
+- **Complete Analysis**: View the comprehensive analysis report
+- **Interactive Dashboard**: Explore charts and filters
+
+### 💻 Local Usage
 1. **Open Dashboard**: Open `Family_Travel_Complaints_Dashboard.html` in any web browser
 2. **View Charts**: Explore interactive charts showing complaint distributions
 3. **Filter Data**: Use category filters to focus on specific complaint types
@@ -117,9 +123,11 @@ This project analyzes family travel complaints from a dataset of 13,630 classifi
 
 ## 🔗 Links
 
-- **Dashboard**: `Family_Travel_Complaints_Dashboard.html`
-- **Full Report**: `Family_Travel_Analysis_Report.html`
-- **Raw Data**: `Classified_Complaints.csv`
+- **🌐 Live Website**: [https://ojpb2000.github.io/family-travel-complaints/](https://ojpb2000.github.io/family-travel-complaints/)
+- **📊 Complete Analysis**: `Family_Travel_Analysis_Report_v2_Complete.html`
+- **📈 Interactive Dashboard**: `Family_Travel_Complaints_Dashboard.html`
+- **📋 Analysis Report**: `Family_Travel_Analysis_Report.html`
+- **📊 Raw Data**: `Classified_Complaints.csv`
 
 ## 📊 Data Sources
 
@@ -135,6 +143,21 @@ This project is open for contributions. Please feel free to:
 - Add new visualization features
 - Enhance the UI/UX design
 - Expand the dataset with new sources
+
+## 🌐 GitHub Pages Deployment
+
+This project is automatically deployed to GitHub Pages. The website is updated every time changes are pushed to the main branch.
+
+### Deployment Features:
+- **Automatic Updates**: Changes are deployed automatically via GitHub Actions
+- **Responsive Design**: Works perfectly on desktop, tablet, and mobile devices
+- **Fast Loading**: Optimized for quick page loads
+- **SEO Friendly**: Proper meta tags and structure for search engines
+
+### Access the Live Site:
+- **Main Website**: [https://ojpb2000.github.io/family-travel-complaints/](https://ojpb2000.github.io/family-travel-complaints/)
+- **Complete Analysis**: [https://ojpb2000.github.io/family-travel-complaints/Family_Travel_Analysis_Report_v2_Complete.html](https://ojpb2000.github.io/family-travel-complaints/Family_Travel_Analysis_Report_v2_Complete.html)
+- **Interactive Dashboard**: [https://ojpb2000.github.io/family-travel-complaints/Family_Travel_Complaints_Dashboard.html](https://ojpb2000.github.io/family-travel-complaints/Family_Travel_Complaints_Dashboard.html)
 
 ## 📄 License
 

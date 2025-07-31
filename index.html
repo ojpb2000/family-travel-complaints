@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Family Travel Complaints Analysis - TBWA Intelligence</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px;
+            text-align: center;
+        }
+        
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+        
+        .header h1 {
+            color: #2c3e50;
+            font-size: 2.8em;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+        
+        .header .subtitle {
+            color: #7f8c8d;
+            font-size: 1.3em;
+            margin-bottom: 30px;
+        }
+        
+        .description {
+            color: #555;
+            font-size: 1.1em;
+            margin-bottom: 40px;
+            line-height: 1.8;
+        }
+        
+        .buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            display: inline-block;
+            background: #3498db;
+            color: white;
+            padding: 15px 30px;
+            text-decoration: none;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 1.1em;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .btn:hover {
+            background: #2980b9;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(52, 152, 219, 0.3);
+        }
+        
+        .btn-secondary {
+            background: #95a5a6;
+        }
+        
+        .btn-secondary:hover {
+            background: #7f8c8d;
+        }
+        
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 40px;
+        }
+        
+        .stat-card {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .stat-number {
+            font-size: 2em;
+            font-weight: bold;
+            color: #3498db;
+            display: block;
+        }
+        
+        .stat-label {
+            color: #7f8c8d;
+            font-size: 0.9em;
+            margin-top: 5px;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            .header h1 {
+                font-size: 2.2em;
+            }
+            
+            .buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .btn {
+                width: 100%;
+                max-width: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏨 Family Travel Complaints Analysis</h1>
+            <div class="subtitle">TBWA Intelligence - Comprehensive Analysis Report</div>
+            <div class="description">
+                Explore our comprehensive analysis of 13,630 family travel complaints, revealing deep cultural expectations gaps, 
+                behavioral patterns, and service delivery failures that consistently disappoint families. 
+                Discover actionable insights for the travel industry.
+            </div>
+            
+            <div class="buttons">
+                <a href="Family_Travel_Analysis_Report_v2_Complete.html" class="btn">📊 View Complete Analysis</a>
+                <a href="Family_Travel_Complaints_Dashboard.html" class="btn btn-secondary">📈 Interactive Dashboard</a>
+            </div>
+        </div>
+        
+        <div class="stats">
+            <div class="stat-card">
+                <span class="stat-number">13,630</span>
+                <div class="stat-label">Total Complaints Analyzed</div>
+            </div>
+            <div class="stat-card">
+                <span class="stat-number">9</span>
+                <div class="stat-label">Complaint Categories</div>
+            </div>
+            <div class="stat-card">
+                <span class="stat-number">5</span>
+                <div class="stat-label">Personality Types Identified</div>
+            </div>
+            <div class="stat-card">
+                <span class="stat-number">47%</span>
+                <div class="stat-label">Singapore Market Share</div>
+            </div>
+        </div>
+    </div>
+</body>
+</html> 
